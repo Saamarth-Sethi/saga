@@ -65,5 +65,5 @@ class RangeSuffrageScheduler(Scheduler):
     def schedule(self, network: nx.Graph, task_graph: nx.DiGraph) -> Dict[str, List[Task]]:
         check_instance_simple(network, task_graph)
         runtimes = RangeSuffrageScheduler.get_runtimes(network, task_graph)
-        schedule_order = heft_rank_sort(network, task_graph)  # Use your range suffrage sorting here
+        schedule_order = heft_rank_sort(network, task_graph)  # Use  range suffrage sorting here
         return self._schedule(network, task_graph, runtimes, schedule_order)
