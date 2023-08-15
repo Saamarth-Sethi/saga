@@ -11,6 +11,25 @@ from ..utils.tools import check_instance_simple, get_insert_loc
 
 thisdir = pathlib.Path(__file__).resolve().parent
 
+def range_suffrage_sort(network: nx.Graph, task_graph: nx.DiGraph) -> List[Hashable]:
+    """Sort tasks based on the range suffrage model.
+
+    Args:
+        network (nx.Graph): The network graph.
+        task_graph (nx.DiGraph): The task graph.
+
+    Returns:
+        List[Hashable]: The sorted list of tasks.
+    """
+    task_ranges = {}
+    for task_name in task_graph.nodes:
+        start_time = min(task_graph.nodes[task_name]['start_times'])
+        end_time = max(task_graph.nodes[task_name]['end_times'])
+        task_ranges[task_name] = end_time - start_time
+
+    return sorted(list(task_ranges.keys()), key=task_ranges.get, reverse=True)
+
+
 class RangeSuffrageScheduler(Scheduler):
     def __init__(self):
         super().__init__()
@@ -65,5 +84,5 @@ class RangeSuffrageScheduler(Scheduler):
     def schedule(self, network: nx.Graph, task_graph: nx.DiGraph) -> Dict[str, List[Task]]:
         check_instance_simple(network, task_graph)
         runtimes = RangeSuffrageScheduler.get_runtimes(network, task_graph)
-        schedule_order = heft_rank_sort(network, task_graph)  # Use  range suffrage sorting here
+        schedule_order = range_suffrage_sort(network, task_graph)  # Use  range suffrage sorting here
         return self._schedule(network, task_graph, runtimes, schedule_order)
