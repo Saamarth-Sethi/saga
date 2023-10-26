@@ -48,7 +48,7 @@ class SufferageScheduler(Scheduler):
             available_tasks = [
                 task for task in task_graph.nodes
                 if task not in scheduled_tasks and all(pred in scheduled_tasks
-                                                       for pred in task_graph.predecessors(task))
+                    for pred in task_graph.predecessors(task))
             ]
 
             sufferages = {}
